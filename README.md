@@ -13,10 +13,10 @@ Develop a REST Interface for storage and retrieval of charging station data. The
 The interface should provide the following functionality:
 
 - Persist charging stations
-- Retrieve/Query charging stations by
--- ID
--- Zipcode / Postal Code
--- a perimeter around a given geolocation
+- Retrieve/Query charging stations by:
+  - ID
+  - Zipcode / Postal Code
+  - a perimeter around a given geolocation
 
 Write some test cases (conceptual test cases, not automated tests) that cover the functionality adequately.
 
