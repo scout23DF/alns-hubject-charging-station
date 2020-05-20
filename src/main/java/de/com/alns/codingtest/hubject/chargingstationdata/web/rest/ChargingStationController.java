@@ -4,16 +4,23 @@ import de.com.alns.codingtest.hubject.chargingstationdata.services.IChargingStat
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.ChargingStationDTO;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+import java.util.Optional;
 
-@RestController("/api")
+@RestController
+@RequestMapping("/api")
 @CommonsLog
 public class ChargingStationController {
+
+    public static final String REST_API_ENTITY_PATH = "charging-stations";
 
     private IChargingStationService chargingStationService;
 
@@ -23,61 +30,97 @@ public class ChargingStationController {
     }
 
 
-    @RequestMapping(value = "/charging-station", method = RequestMethod.POST)
-    public ResponseEntity<ChargingStationDTO> postLocation(@RequestBody ChargingStationDTO pChargingStationDTO) {
+    @PostMapping(value = "/" + REST_API_ENTITY_PATH)
+    public ResponseEntity<ChargingStationDTO> createChargingStation(@RequestBody ChargingStationDTO pChargingStationDTO) {
 
-        Long id = chargingStationService.saveChargingStation(pChargingStationDTO);
+        ChargingStationDTO newEntity;
+        UriComponentsBuilder ucBuilder;
+        HttpHeaders httpHeaders;
 
-        UriComponentsBuilder ucBuilder = UriComponentsBuilder.newInstance();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/location/{id}").buildAndExpand(id).toUri());
+        newEntity = chargingStationService.saveChargingStation(pChargingStationDTO);
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        ucBuilder = UriComponentsBuilder.newInstance();
+        httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ucBuilder.path("/charging-station/{pId}").buildAndExpand(newEntity.getMeaningFullId()).toUri());
+
+        return new ResponseEntity(httpHeaders, HttpStatus.CREATED);
     }
 
-    /*
-    @RequestMapping(value = "/location/{id}", method = RequestMethod.GET)
-    public ResponseEntity getLocationById(@RequestHeader(value = AUTHORIZATION) String userId,
-            @PathVariable("id") Long id) {
+    @PutMapping(value = "/" + REST_API_ENTITY_PATH + "/{pId}")
+    public ResponseEntity<ChargingStationDTO> modifyChargingStation(@PathVariable("pId") String pId,
+                                                                    @RequestBody ChargingStationDTO pChargingStationDTO) {
+        ResponseEntity<ChargingStationDTO> responseEntityResult = null;
 
-        Optional<Feature> location = locationService.findLocationById(userId, id);
-        return location.map(i -> new ResponseEntity<>(i, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @RequestMapping(value = "/location/{id}", method = RequestMethod.PUT)
-    public ResponseEntity putLocation(@RequestHeader(value = AUTHORIZATION) String userId,
-            @PathVariable("id") Long id,
-            @RequestBody Feature feature) {
-
-        if (!locationService.exists(userId, id)) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        if (!chargingStationService.exists(pId)) {
+            responseEntityResult = new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            pChargingStationDTO = chargingStationService.updateChargingStation(pChargingStationDTO);
+            responseEntityResult = ResponseEntity.ok(pChargingStationDTO);
         }
-        locationService.updateLocation(userId, id, feature);
-        return new ResponseEntity(HttpStatus.OK);
+
+        return responseEntityResult;
     }
 
-    @RequestMapping(value = "/location/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteLocation(@RequestHeader(value = AUTHORIZATION) String userId,
-            @PathVariable("id") Long id) {
+    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/{pId}")
+    public ResponseEntity<ChargingStationDTO> getChargingStationById(@PathVariable("pId") String pId) {
+        ResponseEntity<ChargingStationDTO> responseEntityResult;
+        Optional<ChargingStationDTO> optChangingStationFound;
 
-        if (!locationService.exists(userId, id)) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        optChangingStationFound = chargingStationService.searchChargingStationById(pId);
+
+        responseEntityResult = optChangingStationFound.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity(HttpStatus.NOT_FOUND));
+
+        return responseEntityResult;
+    }
+
+    @DeleteMapping(value = "/" + REST_API_ENTITY_PATH + "/{pId}")
+    public ResponseEntity<Void> deleteChargingStationById(@PathVariable("pId") String pId) {
+        ResponseEntity<Void> responseEntityResult = null;
+
+        if (!chargingStationService.exists(pId)) {
+            responseEntityResult = new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            chargingStationService.deleteChargingStation(pId);
+            responseEntityResult = ResponseEntity.ok().build();
         }
-        locationService.deleteLocation(userId, id);
-        return new ResponseEntity(HttpStatus.OK);
+
+        return responseEntityResult;
+
     }
 
-    @RequestMapping(value = "/locations", method = RequestMethod.GET)
-    public ResponseEntity<FeatureCollection> getAllLocations(@RequestHeader(value = AUTHORIZATION) String userId) {
-        return new ResponseEntity<>(locationService.findAllLocations(userId), HttpStatus.OK);
+    @GetMapping(value = "/" + REST_API_ENTITY_PATH)
+    public Page<ChargingStationDTO> getAllChargingStations(Pageable pPageable) {
+        Page<ChargingStationDTO> entitiesFoundPage;
+
+        entitiesFoundPage = chargingStationService.searchAllChargingStations(pPageable);
+
+        return entitiesFoundPage;
     }
 
-    @RequestMapping(value = "/locations/within", method = RequestMethod.POST)
-    public ResponseEntity<FeatureCollection> getLocationsByGeometry(@RequestHeader(value = AUTHORIZATION) String userId,
-            @RequestBody org.wololo.geojson.Geometry geoJson) {
+    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/searchByZipCode")
+    public ResponseEntity<List<ChargingStationDTO>> getChargingStationsByZipCode(@RequestParam("pZipCodeNumber") String pZipCodeNumber) {
+        ResponseEntity<List<ChargingStationDTO>> responseEntityResult;
+        List<ChargingStationDTO> entitiesFoundList;
 
-        return new ResponseEntity<>(locationService.findAllLocationsWithin(userId, geoJson), HttpStatus.OK);
+        entitiesFoundList = chargingStationService.searchChargingStationsByZipCode(pZipCodeNumber);
+
+        responseEntityResult = ResponseEntity.ok(entitiesFoundList);
+
+        return responseEntityResult;
     }
-    */
+
+    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/searchByPerimeter")
+    public ResponseEntity<List<ChargingStationDTO>> getChargingStationsInMyPerimeter(@RequestParam("pLatitudeRef") Double pLatitudeRef,
+                                                                                     @RequestParam("pLongitudeRef") Double pLongitudeRef,
+                                                                                     @RequestParam("pRadius") Double pRadius) {
+        ResponseEntity<List<ChargingStationDTO>> responseEntityResult;
+        List<ChargingStationDTO> entitiesFoundList;
+
+        entitiesFoundList = chargingStationService.searchChargingStationsInCirclePerimeter(pLatitudeRef, pLongitudeRef, pRadius);
+
+        responseEntityResult = ResponseEntity.ok(entitiesFoundList);
+
+        return responseEntityResult;
+    }
+
 }

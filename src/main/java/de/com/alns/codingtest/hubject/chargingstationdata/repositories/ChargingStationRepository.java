@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ChargingStationRepository extends JpaRepository<ChargingStation, Long> {
+public interface ChargingStationRepository extends JpaRepository<ChargingStation, String> {
 
     @Query("select chgsta from tb_charging_station as chgsta where within(chgsta.geoLocationPoint, :pPerimeterFilter) = TRUE")
     public List<ChargingStation> findWithin(@Param("pPerimeterFilter") Geometry pPerimeterFilter);

@@ -1,24 +1,30 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.services;
 
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.ChargingStationDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.wololo.geojson.FeatureCollection;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public interface IChargingStationService {
 
-    public Long saveChargingStation(ChargingStationDTO pChargingStationDTO);
+    public ChargingStationDTO saveChargingStation(ChargingStationDTO pChargingStationDTO);
 
-    public void updateChargingStation(ChargingStationDTO pChargingStationDTO);
+    public ChargingStationDTO updateChargingStation(ChargingStationDTO pChargingStationDTO);
 
-    public void deleteChargingStation(Long pId);
+    public void deleteChargingStation(String pId);
 
-    public Optional<ChargingStationDTO> findLocationById(Long pId);
+    public Boolean exists(String pId);
 
-    public FeatureCollection findAllChargingStations();
+    public Optional<ChargingStationDTO> searchChargingStationById(String pId);
 
-    public FeatureCollection findAllChargingStationsWithin(org.wololo.geojson.Geometry pGeoJson);
+    public Page<ChargingStationDTO> searchAllChargingStations(Pageable pPageable);
+
+    public List<ChargingStationDTO> searchChargingStationsByZipCode(String pZipCodeNumber);
+
+    public List<ChargingStationDTO> searchChargingStationsInCirclePerimeter(Double pLatitude, Double pLongitude, Double pRadius);
 
 }
