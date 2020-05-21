@@ -1,0 +1,71 @@
+version: '2.1'
+
+# TO START THE DESIRED CONTAINERS:
+# - Hybris Shop :: Backend Only:
+#    > clear && docker-compose start db-mysql-hybris app-infra-phpmyadmin app-infra-activemq-artemis
+
+# - Hybris Shop :: Backend + Frontend:
+#    > clear && docker-compose start db-mysql-hybris db-mongodb-cms app-infra-phpmyadmin app-infra-activemq-artemis app-infra-nginx-frontend
+
+# - MySQL, PostgreSQL and Web SQL Clients Databases Only:
+#    > clear && docker-compose start db-mysql-hybris db-mysql-cloudservices db-postgresql-pocs app-infra-phpmyadmin app-infra-pgadmin4
+
+# - Frontend Dependencies:
+#    > clear && docker-compose start db-mongodb-cms app-infra-nginx-frontend
+
+services:
+
+  db-postgis-hubject:  # port: 5432:5432
+    image: kartoza/postgis:${POSTGRESQL_VERSION}
+    container_name: db-postgis-hubject
+    environment:
+      POSTGRES_DBNAME: "DBHubjectChargingStation"
+    #  POSTGRES_USER: "dbaHubject"
+      POSTGRES_PASS: "1a88a1"
+      POSTGRES_MULTIPLE_EXTENSIONS: "postgis,hstore,postgis_topology,postgis_raster,pgrouting"
+      DEFAULT_ENCODING: "en_US.UTF-8"
+      DEFAULT_COLLATION: "id_ID.utf8"
+      DEFAULT_CTYPE: "en_US.UTF-8"
+    #  RECREATE_DATADIR: "true"
+      POSTGRES_TEMPLATE_EXTENSIONS: "true"
+      IP_LIST: "*"
+    ports:
+      - "5432:5432"
+    volumes:
+      - vlmcfg-postgresql-srv-01-data:/var/lib/postgresql/data
+    #  - ${SCRIPTS_POSTGRESQL_SRV_01_PATH}/00-create-users.sql:/docker-entrypoint-initdb.d/00-create-users.sql
+    #  - ${SCRIPTS_POSTGRESQL_SRV_01_PATH}/01-init-dbs-schemas.sql:/docker-entrypoint-initdb.d/01-init-dbs-schemas.sql
+    #  - ${DUMPSDB_POSTGRESQL_SRV_01_PATH}/02-JimSchimidt-DBDiamondsAPS19.sql:/docker-entrypoint-initdb.d/02-JimSchimidt-DBDiamondsAPS19.sql
+    networks:
+      - hubjectDevToolsEnv-Network
+
+
+  app-infra-pgadmin4: # port: 16543:80
+    image: dpage/pgadmin4
+    container_name: app-infra-pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "dba-qq@pgadmin.com"
+      PGADMIN_DEFAULT_PASSWORD: "1a88a1"
+    ports:
+      - "16543:80"
+    depends_on:
+      - db-postgis-hubject
+    networks:
+      - hubjectDevToolsEnv-Network
+
+
+# Networks configurations
+networks:
+  hubjectDevToolsEnv-Network:
+        driver: bridge
+
+
+
+# Volumes for persisting data, see https://docs.docker.com/engine/admin/volumes/volumes/
+volumes:
+
+  vlmcfg-postgresql-srv-01-data:
+    driver_opts:
+      type: none
+      o: bind
+      device: $VOLUME_POSTGRESQL_SRV_01_DATA_PATH

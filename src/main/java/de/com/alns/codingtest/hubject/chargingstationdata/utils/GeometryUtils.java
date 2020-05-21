@@ -1,10 +1,11 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.utils;
 
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.util.GeometricShapeFactory;
 
 public class GeometryUtils {
 
@@ -13,7 +14,7 @@ public class GeometryUtils {
 
     private static GeometryFactory getJtsGeoFactory() {
         if (jtsGeoFactory == null) {
-            jtsGeoFactory = new GeometryFactory(new PrecisionModel(), 4326);
+            jtsGeoFactory = new GeometryFactory(); // new PrecisionModel(), 4326);
         }
         return jtsGeoFactory;
     }
@@ -41,11 +42,11 @@ public class GeometryUtils {
         Coordinate oneCoordenate;
 
         if (pPointLocationDTO != null) {
-            /*
             oneCoordenate = new Coordinate(pPointLocationDTO.getLatitude(), pPointLocationDTO.getLongitude());
             objResult = getJtsGeoFactory().createPoint(oneCoordenate);
-            objResult.setSRID(4326);
-            */
+            // objResult.setSRID(4326);
+
+            /*
             WKTReader wktCarnica = new WKTReader();
             try {
                 objResult = (Point) wktCarnica.read("POINT (" + pPointLocationDTO.getLatitude() + " " + pPointLocationDTO.getLongitude() + ")");
@@ -53,6 +54,7 @@ public class GeometryUtils {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            */
 
         }
 
@@ -77,7 +79,7 @@ public class GeometryUtils {
                                               (40075000 * Math.cos(Math.toRadians(pCircleCentralPoint.getLatitude())) / 360));
 
             objResult = getJtsGeoShapeFactory().createEllipse();
-            objResult.setSRID(4326);
+            // objResult.setSRID(4326);
         }
 
         return objResult;

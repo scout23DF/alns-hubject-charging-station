@@ -1,12 +1,12 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.services.impl;
 
-import com.vividsolutions.jts.geom.Polygon;
 import de.com.alns.codingtest.hubject.chargingstationdata.domain.models.ChargingStation;
 import de.com.alns.codingtest.hubject.chargingstationdata.repositories.ChargingStationRepository;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.IChargingStationService;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
 import de.com.alns.codingtest.hubject.chargingstationdata.utils.GeometryUtils;
 import lombok.extern.apachecommons.CommonsLog;
+import org.locationtech.jts.geom.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

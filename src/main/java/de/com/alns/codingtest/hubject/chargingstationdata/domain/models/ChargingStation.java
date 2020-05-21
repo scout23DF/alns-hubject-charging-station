@@ -1,11 +1,10 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
-import com.vividsolutions.jts.geom.Point;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
 import de.com.alns.codingtest.hubject.chargingstationdata.utils.GeometryUtils;
 import lombok.Data;
+import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
 
@@ -17,7 +16,6 @@ public class ChargingStation {
 
     @Id
     @Column(name = "meaningfullId", columnDefinition = "char(17)", length = 17)  // DE.BER.D999.S9999
-    @NotNull
     private String meaningfullId;
 
     @Column(name = "des_charging_station", length = 255)
@@ -36,10 +34,8 @@ public class ChargingStation {
     private String zipCodeNumber;
 
     @JsonIgnore
-    @NotNull
     @Column(name = "geo_point_location", columnDefinition = "geometry")
     private Point geoLocationPoint;
-
 
     @Transient
     public PointLocationDTO getPointLocationDTO() {
