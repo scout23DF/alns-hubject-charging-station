@@ -1,13 +1,13 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Point;
+import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
+import de.com.alns.codingtest.hubject.chargingstationdata.utils.GeometryUtils;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import java.math.BigDecimal;
 
@@ -16,10 +16,9 @@ import java.math.BigDecimal;
 public class ChargingStation {
 
     @Id
-    @Column(name = "meaningFullId")
+    @Column(name = "meaningfullId", columnDefinition = "char(17)", length = 17)  // DE.BER.D999.S9999
     @NotNull
-    @GeneratedValue
-    private String meaningFullId;
+    private String meaningfullId;
 
     @Column(name = "des_charging_station", length = 255)
     private String descriptionChargingStation;
@@ -33,17 +32,21 @@ public class ChargingStation {
     @Column(name = "sta_available")
     private Boolean isAvailable;
 
-    @Column(name = "num_zip_code", length = 8)
+    @Column(name = "num_zip_code", length = 5)
     private String zipCodeNumber;
 
+    @JsonIgnore
     @NotNull
     @Column(name = "geo_point_location", columnDefinition = "geometry")
     private Point geoLocationPoint;
 
-    @Column(name = "geo_polygon_location", columnDefinition = "geometry")
-    private MultiPolygon geoLocationPolygon;
 
-    @Column(name = "geo_line_location", columnDefinition = "geometry")
-    private LineString geoLocationLine;
+    @Transient
+    public PointLocationDTO getPointLocationDTO() {
+        return GeometryUtils.convertJtsGeometryToPointLocationDTO(this.getGeoLocationPoint());
+    }
 
+    public void setPointLocationDTO(PointLocationDTO pPointLocationDTO) {
+        this.setGeoLocationPoint(GeometryUtils.convertPointLocationDTOToJtsGeometry(pPointLocationDTO));
+    }
 }

@@ -6,13 +6,9 @@ CALL H2GIS_SPATIAL();
 
 
 drop table if exists public.country;
-drop table if exists public.location;
 
 create table public.country (id bigint not null, shape GEOMETRY, iso_a2 varchar(2), iso_a3 varchar(3), name varchar(40), primary key (id));
-create table public.location (id bigint not null, geometry GEOMETRY, name varchar(255), user_id varchar(30), primary key (id));
 
-CREATE INDEX IF NOT EXISTS sidx_country_shape ON public.country (shape);
-CREATE INDEX IF NOT EXISTS sidx_location_geometry ON public.location (geometry);
+-- CREATE INDEX IF NOT EXISTS sidx_country_shape ON public.country (shape);
 
-
-
+CREATE SPATIAL INDEX sidx_country_shape ON public.country (shape);

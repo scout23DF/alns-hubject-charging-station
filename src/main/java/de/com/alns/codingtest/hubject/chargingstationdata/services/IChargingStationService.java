@@ -1,30 +1,27 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.services;
 
-import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.ChargingStationDTO;
+import de.com.alns.codingtest.hubject.chargingstationdata.domain.models.ChargingStation;
+import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public interface IChargingStationService {
 
-    public ChargingStationDTO saveChargingStation(ChargingStationDTO pChargingStationDTO);
-
-    public ChargingStationDTO updateChargingStation(ChargingStationDTO pChargingStationDTO);
+    public ChargingStation saveChargingStation(ChargingStation pChargingStation);
 
     public void deleteChargingStation(String pId);
 
     public Boolean exists(String pId);
 
-    public Optional<ChargingStationDTO> searchChargingStationById(String pId);
+    public Optional<ChargingStation> searchChargingStationById(String pId);
 
-    public Page<ChargingStationDTO> searchAllChargingStations(Pageable pPageable);
+    public Page<ChargingStation> searchAllChargingStations(Pageable pPageable);
 
-    public List<ChargingStationDTO> searchChargingStationsByZipCode(String pZipCodeNumber);
+    public List<ChargingStation> searchChargingStationsByZipCode(String pZipCodeNumber);
 
-    public List<ChargingStationDTO> searchChargingStationsInCirclePerimeter(Double pLatitude, Double pLongitude, Double pRadius);
+    public List<ChargingStation> searchChargingStationsInCirclePerimeter(PointLocationDTO pCircleCentralPoint, Double pRadius);
 
 }

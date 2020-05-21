@@ -21,7 +21,7 @@ public class Swagger2Configuration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("de.com.alns.codingtest.hubject.chargingstationdata"))
+                .apis(RequestHandlerSelectors.basePackage("de.com.alns.codingtest.hubject.chargingstationdata.web.rest"))
                 .paths(regex(".*?"))
                 .build();
     }

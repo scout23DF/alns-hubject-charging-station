@@ -1,7 +1,8 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.web.rest;
 
+import de.com.alns.codingtest.hubject.chargingstationdata.domain.models.ChargingStation;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.IChargingStationService;
-import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.ChargingStationDTO;
+import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,49 +23,47 @@ public class ChargingStationController {
 
     public static final String REST_API_ENTITY_PATH = "charging-stations";
 
-    private IChargingStationService chargingStationService;
+    private final IChargingStationService chargingStationService;
 
     @Autowired
     public ChargingStationController(IChargingStationService pChargingService) {
         this.chargingStationService = pChargingService;
     }
 
-
     @PostMapping(value = "/" + REST_API_ENTITY_PATH)
-    public ResponseEntity<ChargingStationDTO> createChargingStation(@RequestBody ChargingStationDTO pChargingStationDTO) {
+    public ResponseEntity<ChargingStation> createChargingStation(@RequestBody ChargingStation pChargingStation) {
 
-        ChargingStationDTO newEntity;
+        ChargingStation newEntity;
         UriComponentsBuilder ucBuilder;
         HttpHeaders httpHeaders;
 
-        newEntity = chargingStationService.saveChargingStation(pChargingStationDTO);
+        newEntity = chargingStationService.saveChargingStation(pChargingStation);
 
         ucBuilder = UriComponentsBuilder.newInstance();
         httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(ucBuilder.path("/charging-station/{pId}").buildAndExpand(newEntity.getMeaningFullId()).toUri());
+        httpHeaders.setLocation(ucBuilder.path("/" + REST_API_ENTITY_PATH + "/{pId}").buildAndExpand(newEntity.getMeaningfullId()).toUri());
 
         return new ResponseEntity(httpHeaders, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/" + REST_API_ENTITY_PATH + "/{pId}")
-    public ResponseEntity<ChargingStationDTO> modifyChargingStation(@PathVariable("pId") String pId,
-                                                                    @RequestBody ChargingStationDTO pChargingStationDTO) {
-        ResponseEntity<ChargingStationDTO> responseEntityResult = null;
+    @PutMapping(value = "/" + REST_API_ENTITY_PATH)
+    public ResponseEntity<ChargingStation> modifyChargingStation(@RequestBody ChargingStation pChargingStation) {
+        ResponseEntity<ChargingStation> responseEntityResult = null;
 
-        if (!chargingStationService.exists(pId)) {
+        if (!chargingStationService.exists(pChargingStation.getMeaningfullId())) {
             responseEntityResult = new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
-            pChargingStationDTO = chargingStationService.updateChargingStation(pChargingStationDTO);
-            responseEntityResult = ResponseEntity.ok(pChargingStationDTO);
+            pChargingStation = chargingStationService.saveChargingStation(pChargingStation);
+            responseEntityResult = ResponseEntity.ok(pChargingStation);
         }
 
         return responseEntityResult;
     }
 
     @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/{pId}")
-    public ResponseEntity<ChargingStationDTO> getChargingStationById(@PathVariable("pId") String pId) {
-        ResponseEntity<ChargingStationDTO> responseEntityResult;
-        Optional<ChargingStationDTO> optChangingStationFound;
+    public ResponseEntity<ChargingStation> getChargingStationById(@PathVariable("pId") String pId) {
+        ResponseEntity<ChargingStation> responseEntityResult;
+        Optional<ChargingStation> optChangingStationFound;
 
         optChangingStationFound = chargingStationService.searchChargingStationById(pId);
 
@@ -89,18 +88,18 @@ public class ChargingStationController {
     }
 
     @GetMapping(value = "/" + REST_API_ENTITY_PATH)
-    public Page<ChargingStationDTO> getAllChargingStations(Pageable pPageable) {
-        Page<ChargingStationDTO> entitiesFoundPage;
+    public Page<ChargingStation> getAllChargingStations(Pageable pPageable) {
+        Page<ChargingStation> entitiesFoundPage;
 
         entitiesFoundPage = chargingStationService.searchAllChargingStations(pPageable);
 
         return entitiesFoundPage;
     }
 
-    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/searchByZipCode")
-    public ResponseEntity<List<ChargingStationDTO>> getChargingStationsByZipCode(@RequestParam("pZipCodeNumber") String pZipCodeNumber) {
-        ResponseEntity<List<ChargingStationDTO>> responseEntityResult;
-        List<ChargingStationDTO> entitiesFoundList;
+    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/searchByZipCode", params = {"pZipCodeNumber"})
+    public ResponseEntity<List<ChargingStation>> getChargingStationsByZipCode(@RequestParam("pZipCodeNumber") String pZipCodeNumber) {
+        ResponseEntity<List<ChargingStation>> responseEntityResult;
+        List<ChargingStation> entitiesFoundList;
 
         entitiesFoundList = chargingStationService.searchChargingStationsByZipCode(pZipCodeNumber);
 
@@ -109,14 +108,17 @@ public class ChargingStationController {
         return responseEntityResult;
     }
 
-    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/searchByPerimeter")
-    public ResponseEntity<List<ChargingStationDTO>> getChargingStationsInMyPerimeter(@RequestParam("pLatitudeRef") Double pLatitudeRef,
-                                                                                     @RequestParam("pLongitudeRef") Double pLongitudeRef,
-                                                                                     @RequestParam("pRadius") Double pRadius) {
-        ResponseEntity<List<ChargingStationDTO>> responseEntityResult;
-        List<ChargingStationDTO> entitiesFoundList;
+    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/searchByPerimeter", params = {"pLatitudeRef", "pLongitudeRef", "pRadius"})
+    public ResponseEntity<List<ChargingStation>> getChargingStationsInMyPerimeter(@RequestParam("pLatitudeRef") Double pLatitudeRef,
+                                                                                  @RequestParam("pLongitudeRef") Double pLongitudeRef,
+                                                                                  @RequestParam("pRadius") Double pRadius) {
+        ResponseEntity<List<ChargingStation>> responseEntityResult;
+        List<ChargingStation> entitiesFoundList;
+        PointLocationDTO circleCentralPoint = null;
 
-        entitiesFoundList = chargingStationService.searchChargingStationsInCirclePerimeter(pLatitudeRef, pLongitudeRef, pRadius);
+        circleCentralPoint = new PointLocationDTO(pLatitudeRef, pLongitudeRef);
+
+        entitiesFoundList = chargingStationService.searchChargingStationsInCirclePerimeter(circleCentralPoint, pRadius);
 
         responseEntityResult = ResponseEntity.ok(entitiesFoundList);
 
