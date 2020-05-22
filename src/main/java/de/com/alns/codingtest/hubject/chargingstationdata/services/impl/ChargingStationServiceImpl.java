@@ -32,6 +32,11 @@ public class ChargingStationServiceImpl implements IChargingStationService {
     }
 
     @Override
+    public List<ChargingStation> saveChargingStationsList(List<ChargingStation> pChargingStationsList) {
+        return chargingStationRepository.saveAll(pChargingStationsList);
+    }
+
+    @Override
     public void deleteChargingStation(String pId) {
         chargingStationRepository.deleteById(pId);
     }

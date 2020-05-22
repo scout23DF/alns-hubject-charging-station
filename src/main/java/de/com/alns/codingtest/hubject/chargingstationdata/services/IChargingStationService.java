@@ -12,6 +12,8 @@ public interface IChargingStationService {
 
     public ChargingStation saveChargingStation(ChargingStation pChargingStation);
 
+    public List<ChargingStation> saveChargingStationsList(List<ChargingStation> pChargingStationsList);
+
     public void deleteChargingStation(String pId);
 
     public Boolean exists(String pId);

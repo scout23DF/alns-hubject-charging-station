@@ -46,6 +46,16 @@ public class ChargingStationController {
         return new ResponseEntity(httpHeaders, HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "/" + REST_API_ENTITY_PATH + "/insertAsList")
+    public ResponseEntity<List<ChargingStation>> createCollectionChargingStation(@RequestBody List<ChargingStation> pChargingStationsList) {
+
+        List<ChargingStation> newEntitiesList;
+
+        newEntitiesList = chargingStationService.saveChargingStationsList(pChargingStationsList);
+
+        return ResponseEntity.ok(newEntitiesList);
+    }
+
     @PutMapping(value = "/" + REST_API_ENTITY_PATH)
     public ResponseEntity<ChargingStation> modifyChargingStation(@RequestBody ChargingStation pChargingStation) {
         ResponseEntity<ChargingStation> responseEntityResult = null;

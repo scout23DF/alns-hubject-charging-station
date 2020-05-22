@@ -1,4 +1,4 @@
-version: '2.1'
+version: '2.0'
 
 # TO START THE DESIRED CONTAINERS:
 # - Hybris Shop :: Backend Only:
@@ -26,16 +26,15 @@ services:
       DEFAULT_ENCODING: "en_US.UTF-8"
       DEFAULT_COLLATION: "id_ID.utf8"
       DEFAULT_CTYPE: "en_US.UTF-8"
-    #  RECREATE_DATADIR: "true"
+      RECREATE_DATADIR: "true"
       POSTGRES_TEMPLATE_EXTENSIONS: "true"
       IP_LIST: "*"
     ports:
       - "5432:5432"
     volumes:
-      - vlmcfg-postgresql-srv-01-data:/var/lib/postgresql/data
+      - vlmcfg-postgresql-srv-01-data:/var/lib/postgresql
     #  - ${SCRIPTS_POSTGRESQL_SRV_01_PATH}/00-create-users.sql:/docker-entrypoint-initdb.d/00-create-users.sql
     #  - ${SCRIPTS_POSTGRESQL_SRV_01_PATH}/01-init-dbs-schemas.sql:/docker-entrypoint-initdb.d/01-init-dbs-schemas.sql
-    #  - ${DUMPSDB_POSTGRESQL_SRV_01_PATH}/02-JimSchimidt-DBDiamondsAPS19.sql:/docker-entrypoint-initdb.d/02-JimSchimidt-DBDiamondsAPS19.sql
     networks:
       - hubjectDevToolsEnv-Network
 
@@ -68,4 +67,5 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: $VOLUME_POSTGRESQL_SRV_01_DATA_PATH
+    #  device: /home/andre.nascimento/docker-volumes/postgresql-srv-01/data
+      device: ${VOLUME_POSTGRESQL_SRV_01_DATA_PATH}

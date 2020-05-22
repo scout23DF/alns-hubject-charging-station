@@ -32,3 +32,54 @@ Pay special attention to:
 Please submit your project via a private GitHub repository (further instruction in the email).
 
 The focus of this task is on your ways of working and the structure of your code. Your do not need to implement all features and your application does not need to work without errors.
+
+
+# Test Data:
+
+```
+[
+   {
+     "meaningfullId": "DE.BER.D007.S0001",
+     "descriptionChargingStation": "Station N# 1 - Mariendorf - Berlin - DE",
+     "isActive": true,
+     "percentuaEnergyLoaded": 100,
+     "isAvailable": true,
+     "zipCodeNumber": "12277",
+     "pointLocationDTO": {
+       "latitude": 52.52343,
+       "longitude": 13.41144
+     }
+   },
+   {
+     "meaningfullId": "DE.BER.D007.S0002",
+     "descriptionChargingStation": "Station N# 2 - Mariendorf - Berlin - DE",
+     "isActive": true,
+     "percentuaEnergyLoaded": 100,
+     "isAvailable": true,
+     "zipCodeNumber": "12277",
+     "pointLocationDTO": {
+       "latitude": 52.523425,
+       "longitude": 13.411448
+     }
+   },
+   {
+     "meaningfullId": "DE.BER.D007.S0003",
+     "descriptionChargingStation": "Station N# 3 - Mariendorf - Berlin - DE",
+     "isActive": true,
+     "percentuaEnergyLoaded": 100,
+     "isAvailable": true,
+     "zipCodeNumber": "12277",
+     "pointLocationDTO": {
+       "latitude": 52.523415,
+       "longitude": 13.411461
+     }
+   }
+ ]
+ 
+ 
+ 52.514448, 13.412000, 1 => []
+ 52.514449, 13.412000, 1 => [DE.BER.D007.S0003]
+ 52.514459, 13.412000, 1 => [DE.BER.D007.S0002, DE.BER.D007.S0003]
+ 52.514471, 13.412000, 1 => [DE.BER.D007.S0001, DE.BER.D007.S0002, DE.BER.D007.S0003]
+ ```
+ 
