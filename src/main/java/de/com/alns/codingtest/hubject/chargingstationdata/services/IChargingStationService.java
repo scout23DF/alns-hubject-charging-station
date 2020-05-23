@@ -1,6 +1,6 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.services;
 
-import de.com.alns.codingtest.hubject.chargingstationdata.domain.models.ChargingStation;
+import de.com.alns.codingtest.hubject.chargingstationdata.models.ChargingStation;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

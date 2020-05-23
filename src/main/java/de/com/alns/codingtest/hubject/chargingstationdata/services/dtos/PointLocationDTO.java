@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.bytebuddy.asm.Advice;
 
+import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 
 @Getter
@@ -12,7 +13,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class PointLocationDTO {
 
+    @Digits(integer = 2, fraction = 6)
     private Double latitude;
+    @Digits(integer = 2, fraction = 6)
     private Double longitude;
 
 }

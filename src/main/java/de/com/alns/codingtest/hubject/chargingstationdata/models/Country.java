@@ -1,4 +1,4 @@
-package de.com.alns.codingtest.hubject.chargingstationdata.domain.models;
+package de.com.alns.codingtest.hubject.chargingstationdata.models;
 
 import com.sun.istack.NotNull;
 import com.vividsolutions.jts.geom.MultiPolygon;
@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 @Data
 @Entity(name = "country")
-public class CountryEntity {
+public class Country {
 
     @Id
     @Column(name = "id")

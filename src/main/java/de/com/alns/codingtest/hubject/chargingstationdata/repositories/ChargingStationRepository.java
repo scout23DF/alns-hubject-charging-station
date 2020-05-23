@@ -1,6 +1,6 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.repositories;
 
-import de.com.alns.codingtest.hubject.chargingstationdata.domain.models.ChargingStation;
+import de.com.alns.codingtest.hubject.chargingstationdata.models.ChargingStation;
 import org.locationtech.jts.geom.Polygon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

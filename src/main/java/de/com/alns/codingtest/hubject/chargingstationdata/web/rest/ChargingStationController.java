@@ -1,6 +1,6 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.web.rest;
 
-import de.com.alns.codingtest.hubject.chargingstationdata.domain.models.ChargingStation;
+import de.com.alns.codingtest.hubject.chargingstationdata.models.ChargingStation;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.IChargingStationService;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
 import lombok.extern.apachecommons.CommonsLog;
@@ -41,7 +41,7 @@ public class ChargingStationController {
 
         ucBuilder = UriComponentsBuilder.newInstance();
         httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(ucBuilder.path("/" + REST_API_ENTITY_PATH + "/{pId}").buildAndExpand(newEntity.getMeaningfullId()).toUri());
+        httpHeaders.setLocation(ucBuilder.path("/api/" + REST_API_ENTITY_PATH + "/{pId}").buildAndExpand(newEntity.getMeaningfullId()).toUri());
 
         return new ResponseEntity(httpHeaders, HttpStatus.CREATED);
     }
@@ -118,17 +118,17 @@ public class ChargingStationController {
         return responseEntityResult;
     }
 
-    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/searchByPerimeter", params = {"pLatitudeRef", "pLongitudeRef", "pRadius"})
+    @GetMapping(value = "/" + REST_API_ENTITY_PATH + "/searchByPerimeter", params = {"pLatitudeRef", "pLongitudeRef", "pRadiusInKm"})
     public ResponseEntity<List<ChargingStation>> getChargingStationsInMyPerimeter(@RequestParam("pLatitudeRef") Double pLatitudeRef,
                                                                                   @RequestParam("pLongitudeRef") Double pLongitudeRef,
-                                                                                  @RequestParam("pRadius") Double pRadius) {
+                                                                                  @RequestParam("pRadiusInKm") Double pRadiusInKm) {
         ResponseEntity<List<ChargingStation>> responseEntityResult;
         List<ChargingStation> entitiesFoundList;
         PointLocationDTO circleCentralPoint = null;
 
         circleCentralPoint = new PointLocationDTO(pLatitudeRef, pLongitudeRef);
 
-        entitiesFoundList = chargingStationService.searchChargingStationsInCirclePerimeter(circleCentralPoint, pRadius);
+        entitiesFoundList = chargingStationService.searchChargingStationsInCirclePerimeter(circleCentralPoint, pRadiusInKm);
 
         responseEntityResult = ResponseEntity.ok(entitiesFoundList);
 

@@ -1,6 +1,6 @@
 package de.com.alns.codingtest.hubject.chargingstationdata.services.impl;
 
-import de.com.alns.codingtest.hubject.chargingstationdata.domain.models.ChargingStation;
+import de.com.alns.codingtest.hubject.chargingstationdata.models.ChargingStation;
 import de.com.alns.codingtest.hubject.chargingstationdata.repositories.ChargingStationRepository;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.IChargingStationService;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
