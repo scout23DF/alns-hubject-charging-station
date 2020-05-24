@@ -108,7 +108,7 @@ In the Development Environment, [PostgreSQL + PostGIS] + PGAdmin and its depende
 - To build and run the `alns-hubject-charging-station` Application perform the following steps:
   - Open the project in your lovely IDE and build and run the app throughout that way; OR
   - Go to the project's root and issue the command:
-    - [project-dir]/mvn clear && mvn spring-boot:run
+    - [project-dir]/clear && mvn spring-boot:run
 
 ## Using the Application
 
