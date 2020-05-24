@@ -4,7 +4,7 @@ import de.com.alns.codingtest.hubject.chargingstationdata.models.ChargingStation
 import de.com.alns.codingtest.hubject.chargingstationdata.repositories.ChargingStationRepository;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.IChargingStationService;
 import de.com.alns.codingtest.hubject.chargingstationdata.services.dtos.PointLocationDTO;
-import de.com.alns.codingtest.hubject.chargingstationdata.utils.GeometryUtils;
+import de.com.alns.codingtest.hubject.chargingstationdata.utils.HJGeometryUtils;
 import lombok.extern.apachecommons.CommonsLog;
 import org.locationtech.jts.geom.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class ChargingStationServiceImpl implements IChargingStationService {
 
     @Override
     public List<ChargingStation> searchChargingStationsByZipCode(String pZipCodeNumber) {
-        return chargingStationRepository.findByZipCodeNumber(pZipCodeNumber);
+        return chargingStationRepository.findByZipCodeNumberLike(pZipCodeNumber);
     }
 
     @Override
@@ -66,13 +66,18 @@ public class ChargingStationServiceImpl implements IChargingStationService {
         List<ChargingStation> resultList = null;
         Polygon circlePerimiterFilter;
 
-        circlePerimiterFilter = GeometryUtils.buildCircleGeometryPerimiter(pCircleCentralPoint, pRadius);
+        circlePerimiterFilter = HJGeometryUtils.buildCircleGeometryPerimiter(pCircleCentralPoint, pRadius);
 
         if (circlePerimiterFilter != null) {
             resultList = chargingStationRepository.findInPerimeter(circlePerimiterFilter);
         }
 
         return resultList;
+    }
+
+    @Override
+    public Long obtainTotalChargingStation() {
+        return chargingStationRepository.count();
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ChargingStationRepository extends JpaRepository<ChargingStation, String> {
 
-    public List<ChargingStation> findByZipCodeNumber(String pZipCodeNumber);
+    public List<ChargingStation> findByZipCodeNumberLike(String pZipCodeNumber);
 
     @Query("select chgsta from tb_charging_station as chgsta where within(chgsta.geoLocationPoint, :pPerimeterFilter) = TRUE")
     public List<ChargingStation> findInPerimeter(@Param("pPerimeterFilter") Polygon pPerimeterFilter);

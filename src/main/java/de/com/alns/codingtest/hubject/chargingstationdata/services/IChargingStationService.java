@@ -26,4 +26,5 @@ public interface IChargingStationService {
 
     public List<ChargingStation> searchChargingStationsInCirclePerimeter(PointLocationDTO pCircleCentralPoint, Double pRadius);
 
+    public Long obtainTotalChargingStation();
 }

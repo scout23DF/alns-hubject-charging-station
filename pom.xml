@@ -82,33 +82,6 @@
             <version>2.4</version>
         </dependency>
 
-        <!--
-        <dependency>
-            <groupId>org.geolatte</groupId>
-            <artifactId>geolatte-geojson</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.orbisgis</groupId>
-            <artifactId>h2gis</artifactId>
-            <version>1.5.0</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wololo</groupId>
-            <artifactId>jts2geojson</artifactId>
-            <version>0.11.0</version>
-        </dependency>
-
-        -->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -131,6 +104,11 @@
             <artifactId>javafx.base</artifactId>
             <version>11.0.0-SNAPSHOT</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 
