@@ -1,17 +1,8 @@
 version: '2.0'
 
 # TO START THE DESIRED CONTAINERS:
-# - Hybris Shop :: Backend Only:
-#    > clear && docker-compose start db-mysql-hybris app-infra-phpmyadmin app-infra-activemq-artemis
-
-# - Hybris Shop :: Backend + Frontend:
-#    > clear && docker-compose start db-mysql-hybris db-mongodb-cms app-infra-phpmyadmin app-infra-activemq-artemis app-infra-nginx-frontend
-
-# - MySQL, PostgreSQL and Web SQL Clients Databases Only:
-#    > clear && docker-compose start db-mysql-hybris db-mysql-cloudservices db-postgresql-pocs app-infra-phpmyadmin app-infra-pgadmin4
-
-# - Frontend Dependencies:
-#    > clear && docker-compose start db-mongodb-cms app-infra-nginx-frontend
+# - PostgreSQL + PostGIS + pgAdmin :
+#    > clear && docker-compose up
 
 services:
 
