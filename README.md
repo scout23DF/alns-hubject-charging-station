@@ -1,5 +1,5 @@
-# alns-hubject-charging-station
-Project for handle Charging Station Data :: A Coding Task for a position in HubJect Company
+# alns-ev-charging-station
+Project for handle Charging Station Data :: A Coding Task for a position in a suitable new Company
 
 
 # Coding Task :: The Mission
