@@ -19,7 +19,7 @@
         <java.version>8</java.version>
         <!-- Need to use an earlier version of H2 when using H2GIS -->
         <h2.version>1.4.197</h2.version>
-        <springfox.version>2.9.2</springfox.version>
+        <springfox.version>2.10.0</springfox.version>
     </properties>
 
     <dependencies>
